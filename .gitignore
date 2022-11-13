@@ -3,3 +3,6 @@ bin
 obj
 appsettings.local.json
 *.gcode
+*.tap
+*.nc
+*.c2d

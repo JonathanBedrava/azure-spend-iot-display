@@ -26,9 +26,9 @@ module base(){
         translate([3,y3-3,-.5])
             cylinder(r=rad,h=z+1);
         
-        translate([x2/4-5,-.5,-.5])
-            cube([15,15,3]);
-        translate([x2-(x2/4+5),-.5,-.5])
-            cube([15,15,3]);
+        translate([x2/4-8,-.5,-.5])
+            cube([20,15,3]);
+        translate([x2-(x2/4+10),-.5,-.5])
+            cube([20,15,3]);
     }
 }
