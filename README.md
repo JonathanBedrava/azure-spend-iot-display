@@ -67,6 +67,7 @@ Interface Options -> I2C - Yes
 ```
 
 ## Hardware - Wiring
+- Note that the left seven-seg display uses an address of 114 (0x72). On the typical backpack, this means the middle address jumper is closed whereas the two others are left open.
 - Power off your PI while working with GPIO pins.
 - Wiring is easy. Connect the following GPIO pins to the 7-seg displays:
     - GPIO ground -> both driver ground pins (-)
