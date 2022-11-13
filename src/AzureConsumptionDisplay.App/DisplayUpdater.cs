@@ -36,8 +36,6 @@ public class DisplayUpdater : IDisplayUpdater
         
         var leftString = amount.Substring(0, amount.Length - (amount.Contains(".") ? 5 : 4));
         var rightString = amount.Substring(amount.Length - (amount.Contains(".") ? 5 : 4), (amount.Contains(".") ? 5 : 4));
-        Console.WriteLine(leftString);
-        Console.WriteLine(rightString);
         
         displayRight.Dots = Dot.DecimalPoint;
 
@@ -57,10 +55,6 @@ public class DisplayUpdater : IDisplayUpdater
         {
             s[i] =  GetSegmentForNumber(v[i]);
             s[i] = s[i] | (containsDot && i == 1 ? Segment.Dot : Segment.None);
-            if(containsDot)
-            {
-                Console.WriteLine(s[i]);
-            }
         }
     
         ReadOnlySpan<Segment> span = new ReadOnlySpan<Segment>(s);
