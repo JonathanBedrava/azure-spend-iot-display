@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Net.NetworkInformation;
 using System.Text.Json;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Newtonsoft.Json.Linq;
@@ -8,10 +9,19 @@ namespace AzureConsumptionDisplay.App;
 public class CostRetriever : ICostRetriever
 {
     private readonly CostRetrieverSettings _settings;
-    public CostRetriever(CostRetrieverSettings settings) => _settings = settings;
+    private readonly IDisplayUpdater _displayUpdater;
+    private static readonly TimeSpan _pingTimeoutSeconds = TimeSpan.FromSeconds(60);
+    private static readonly TimeSpan _pingInterval = TimeSpan.FromSeconds(3);
+    private const string _networkTestIp = "8.8.8.8";
+    public CostRetriever(CostRetrieverSettings settings, IDisplayUpdater displayUpdater)  
+    {    
+        _settings = settings;
+        _displayUpdater = displayUpdater;
+    }
 
     public async Task<CostResult> GetCostResult()
     {
+        await WaitOnNetwork();
         var token = await GetAuthToken(_settings.AppId, _settings.Secret, _settings.TenantId);
         var current = await GetCurrentUsage(token, _settings.SubscriptionId);
         
@@ -40,6 +50,36 @@ public class CostRetriever : ICostRetriever
         "{\"type\":\"ActualCost\",\"dataSet\":{\"granularity\":\"Monthly\",\"aggregation\":{\"preTaxCost\":{\"name\":\"PreTaxCost\",\"function\":\"Sum\"}}}}"
     );
 }
+
+private async Task WaitOnNetwork()
+{
+    await Task.WhenAny(
+        Task.Delay(_pingTimeoutSeconds),
+        Task.Run(async () => {
+            var pingResult = Ping();
+            while((!pingResult)){
+                pingResult = Ping();
+                for(var i = 0; i < DisplayUpdater.NumberOfLoadingSegs; i++)
+                {
+                    var interval = _pingInterval/DisplayUpdater.NumberOfLoadingSegs;
+                    if(i == DisplayUpdater.NumberOfLoadingSegs)
+                    {
+                        i = 0;
+                    }
+                    await _displayUpdater.DisplayLoading(i);
+                    await Task.Delay(interval);
+                }
+            }
+        }));
+}
+
+static bool Ping()
+{
+    Ping ping = new Ping();
+    var response = ping.Send(_networkTestIp);
+    return response.Status == IPStatus.Success;
+}
+          
 
 static async Task<string> GetAuthToken(string appId, string secret, string tenantId)
 {

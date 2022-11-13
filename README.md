@@ -28,14 +28,6 @@ Interface Options -> I2C - Yes
   "tenant": "00000000-0000-0000-0000-000000000000"
   ```
     - You will also have to log into the Azure portal and grand read access to this service principle on the subscription. Subscriptions -> Access Control -> Add Role Assignment, etc. Know what you are doing.
-- SSH into your PI and set the following environment variables with the values from above as well as your Azure subscription id with the following commands:
-    ```
-    echo "export AZURE_APP_ID='[YOUR APP ID]'" >> ~/.bashrc 
-    echo "export AZURE_APP_PASSWORD='[YOUR APP PASSWORD]'" >> ~/.bashrc
-    echo "export AZURE_APP_TENANT='[YOUR TENANT ID]'" >> ~/.bashrc
-    echo "export AZURE_SUBSCRIPTION_ID='[YOUR SUBSCRIPTION ID]'" >> ~/.bashrc
-    ```
-    - You can either reboot, or load these variables into your current session with the command `source ~/.bashrc`
 - SSH into your Pi and install the .NET Core framework
     ```
     curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel Current
@@ -48,7 +40,16 @@ Interface Options -> I2C - Yes
     ```
 
 ## Build & Deploy!
-- On your desktop, or whatever, build and publish the app with the command running in the `src/AzureConsumptionDisplay.App` dir:
+- On your desktop, or whatever, navigate to the repo's `/src/AzureConsumptionDisplay.App` directory and create an `appsettings.local.json` and add the following config substituting the config values specific to your service principal:
+    ```
+    {
+        "AZURE_APP_ID": "<Your service principal app id>",
+        "AZURE_APP_PASSWORD": "<Your app password>",
+        "AZURE_APP_TENANT": "<Your app tenant>",
+        "AZURE_SUBSCRIPTION_ID": "<your app subscription id>"
+    }
+    ```
+- Build and publish the app with the command running in the `src/AzureConsumptionDisplay.App` dir:
     ```
     dotnet publish --runtime linux-arm --self-contained
     ```
@@ -57,8 +58,9 @@ Interface Options -> I2C - Yes
     scp -r ./bin/debug/net6.0/linux-arm/publish/* [YOUR PI LOGIN]@[YOUR PI IP]:/home/[YOUR PI LOGIN]]/azure-consumption-display/ 
     ```
     - You may need to create the destination directory first
-- SSH into your Pi and set up a cronjob for this bad boy.
+- SSH into your Pi and set up a cronjob for this bad boy with `crontab -e`.
 ```
-*/5 * * * * bash ~/home/[YOUR USER]/azure-consumption-display/AzureConsumptionDisplay.App >> home/[YOUR USER]/azure-consumption-display-log 2>&1
-@reboot bash ~home/[YOUR USER]/azure-consumption-display/AzureConsumptionDisplay.App >> home/[YOUR USER]/azure-consumption-display-log 2>&1
+*/5 * * * * /home/[YOUR USERNAME]/.dotnet/dotnet /home/[YOUR USERNAME]/azure-consumption-display/AzureConsumptionDisplay.App.dll >/home/[YOUR USERNAME]/azure-consumption-display-log 2>&1
+
+@reboot /home/[YOUR USERNAME]/.dotnet/dotnet /home/[YOUR USERNAME]/azure-consumption-display/AzureConsumptionDisplay.App.dll >/home/[YOUR USERNAME]/azure-consumption-display-log 2>&1
 ```
