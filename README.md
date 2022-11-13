@@ -5,7 +5,8 @@ This is a simple project guide for a nifty little Raspberri Pi desk toy that dis
 ## Prerequisites
 - A Raspberry Pi. You can probably get away with one as old as v2.
 - A computer with .NET Core sdk installed. You'll be compiling .NET Core code and publishing it to your pretty little Raspberry Pi.
-
+- 2x 7-segment displays w/ HT16K33 driver backpack. You can get these from Adafruit and various other retailers.
+- Jumpers or wires and a breadboard and so on.
 
 ## Pi Setup
 - Burn a fresh Raspberry Pi with a fresh Raspbian or similar installed. As always, change the default username and password. For reals.
@@ -64,3 +65,13 @@ Interface Options -> I2C - Yes
 
 @reboot /home/[YOUR USERNAME]/.dotnet/dotnet /home/[YOUR USERNAME]/azure-consumption-display/AzureConsumptionDisplay.App.dll >/home/[YOUR USERNAME]/azure-consumption-display-log 2>&1
 ```
+
+## Hardware - Wiring
+- Power off your PI while working with GPIO pins.
+- Wiring is easy. Connect the following GPIO pins to the 7-seg displays:
+    - GPIO ground -> both driver ground pins (-)
+    - GPIO 5V -> both (+) pins
+    - GPIO SDA -> both SDA pins (D)
+    - GPIL SCL -> both SCL pins (C)
+- It's that easy. Breadboard it out.
+- At this point you should be able to power up the Pi and as soon as the update job finishes, you will see something on your display. Rejoice!
