@@ -11,3 +11,5 @@ var config = new ConfigurationBuilder()
 var costRetriever = new CostRetriever(new(config["AZURE_APP_ID"], config["AZURE_APP_PASSWORD"], config["AZURE_APP_TENANT"], config["AZURE_SUBSCRIPTION_ID"]));
 var cost = await costRetriever.GetCostResult();
 Console.WriteLine(JsonConvert.SerializeObject(cost));
+var displayUpdater = new DisplayUpdater();
+await displayUpdater.UpdateDisplay(cost.CurrentCost);

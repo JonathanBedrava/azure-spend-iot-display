@@ -8,7 +8,7 @@ This is a simple project guide for a nifty little Raspberri Pi desk toy that dis
 
 
 ## Pi Setup
-- Burn a fresh Raspberry Pi with a fresh Raspbian or similar installed.
+- Burn a fresh Raspberry Pi with a fresh Raspbian or similar installed. As always, change the default username and password. For reals.
 - Setup `wpa-supplicant` with your WiFi's SSID and password
 - Enable ssh (adding a file called `ssh`  on the boot is all that's necessary)
 - SSH into the Pi and enable I2C support with `raspi-config`
@@ -57,3 +57,8 @@ Interface Options -> I2C - Yes
     scp -r ./bin/debug/net6.0/linux-arm/publish/* [YOUR PI LOGIN]@[YOUR PI IP]:/home/[YOUR PI LOGIN]]/azure-consumption-display/ 
     ```
     - You may need to create the destination directory first
+- SSH into your Pi and set up a cronjob for this bad boy.
+```
+*/5 * * * * bash ~/home/[YOUR USER]/azure-consumption-display/AzureConsumptionDisplay.App >> home/[YOUR USER]/azure-consumption-display-log 2>&1
+@reboot bash ~home/[YOUR USER]/azure-consumption-display/AzureConsumptionDisplay.App >> home/[YOUR USER]/azure-consumption-display-log 2>&1
+```

@@ -21,7 +21,6 @@ public class CostRetriever : ICostRetriever
     static async Task<decimal> GetCurrentUsage(string authToken, string subscriptionId)
     {
         var url = $"https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.CostManagement/query?api-version=2019-11-01";
-        Console.WriteLine(url);
         using(var client = new HttpClient())
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
@@ -31,7 +30,6 @@ public class CostRetriever : ICostRetriever
         var body = await response.Content.ReadAsStringAsync();
         var parsedBody = JObject.Parse(body);
         var dataRow = parsedBody["properties"]["rows"][0];
-        Console.WriteLine(dataRow);
         return Math.Round((decimal)dataRow[0], 2);
     }
 }
