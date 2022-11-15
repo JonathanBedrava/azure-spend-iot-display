@@ -100,7 +100,7 @@ public class DisplayUpdater : IDisplayUpdater
 
     private static string FormatOutput(decimal amount)
     {
-        var amtString = amount.ToString();
+        var amtString = amount.ToString("N2");
         if(amtString.Length > (amtString.Contains(".") ? 9 : 8))
         {
             return amtString.Split(".")[0];
