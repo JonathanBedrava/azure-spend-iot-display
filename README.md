@@ -94,3 +94,5 @@ Interface Options -> I2C - Yes
     - If you have a slim, low-profile 90 degree screwdriver you can mount the Pi after assembly, but it's probably easier to do it beforehand.
 - Assemble all mitered pieces of the enclosure, slotting in the panel in the groove between the two end pieces. Add adhesive and splines and whatnot.
 - Clamp with a strap clamp or simlar. Leave to dry.
+- Add feet or whatnot.
+- Add a USB/USB-C power port.
