@@ -1,6 +1,6 @@
 # azure-spend-iot-display
 
-This is a simple project guide for a nifty little Raspberri Pi desk toy that displays your current Azure consumption on an 7-segment desplay. Amaze all your friends and colleagues with a constant reminder of your profligate cloud hosting spending!
+This is a simple project guide for a nifty little Raspberri Pi desk toy that displays your current Azure consumption on two HT16K33 7-segment displays. Amaze all your friends and colleagues with a constant reminder of your profligate cloud hosting spending!
 
 ![In a beautiful enclosure.](./enclosure1.JPG)
 
@@ -8,7 +8,8 @@ This is a simple project guide for a nifty little Raspberri Pi desk toy that dis
 - A Raspberry Pi. You can probably get away with one as old as v2.
 - A computer with .NET Core sdk installed. You'll be compiling .NET Core code and publishing it to your pretty little Raspberry Pi.
 - 2x 7-segment displays w/ HT16K33 driver backpack. You can get these from Adafruit and various other retailers.
-- Jumpers or wires and a breadboard and so on.
+- Jumpers or wires and a breadboard/stripboard and so on.
+- Optional: CNC and 3D printer if you plan to fabricate one using the contents of the `/src/Enclosure` directory.
 
 ## Pi Setup
 - Burn a fresh Raspberry Pi with a fresh Raspbian or similar installed. As always, change the default username and password. For reals.
@@ -78,3 +79,18 @@ Interface Options -> I2C - Yes
     - GPIL SCL -> both SCL pins (C)
 - It's that easy. Breadboard it out.
 - At this point you should be able to power up the Pi and as soon as the update job finishes, you will see something on your display. Rejoice!
+
+## Hardware - Enclosure
+- The enclosure (pictured above) can be created with the files in the `/src/Enclosure/` folder.
+- The designs assume a board thickness of 24.3mm. Panel thickness is assumed 3.175mm (1/8");
+- CNC the `enclosure-panel`, `enclosure-top`, `enclosure-front`, `enclosure-back`, and `enclosure-end` (and again, reversed). Make sure to include a toolpath for the grooves along the front profile on the `enclosure-end` and the tool paths for the splines.
+- Miter the appropriate ends.
+- The `seven-seg-display-mount.stl` will accommodate two .56" seven-segment displays (with HT16K33 backpack). It is a tight friction-fit. and will take some squeezing. An OpenScad file is provided to fiddle with as desired. Attach to the CNCed panel with M3 screws.
+- How the electronics go inside is a bit up to you. Here's how I did it:
+    - Mark out the Raspberry Pi's mounting hole footprint on the inside of the back and screw in M2.5 standoffs.
+        - The bottom of the enclosure is open. The Pi should be positioned so that you can easily access the SD card.
+    - Solder a stripboard with female pin headers spaced to fit the pins on the display backpacks. Solder in 4-pin male header somewhere in between. Solder in wires connecting the corresponding pins with the female headers.
+    - The goal here is that you can fit this onto the back of the displays and plug the Pi in with jumper cables once everything is attached.
+    - If you have a slim, low-profile 90 degree screwdriver you can mount the Pi after assembly, but it's probably easier to do it beforehand.
+- Assemble all mitered pieces of the enclosure, slotting in the panel in the groove between the two end pieces. Add adhesive and splines and whatnot.
+- Clamp with a strap clamp or simlar. Leave to dry.
