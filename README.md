@@ -2,6 +2,8 @@
 
 This is a simple project guide for a nifty little Raspberri Pi desk toy that displays your current Azure consumption on an 7-segment desplay. Amaze all your friends and colleagues with a constant reminder of your profligate cloud hosting spending!
 
+![In a beautiful enclosure.](./enclosure.JPG)
+
 ## Prerequisites
 - A Raspberry Pi. You can probably get away with one as old as v2.
 - A computer with .NET Core sdk installed. You'll be compiling .NET Core code and publishing it to your pretty little Raspberry Pi.
